@@ -1,5 +1,6 @@
 services:
   vscode-rails:
+    image: ghcr.io/chriopter/docker-vscode-rails:main
     build: .
     container_name: vscode-rails-dev
     hostname: vscode-rails
