@@ -18,17 +18,9 @@ services:
       - vscode-data:/home/developer/.vscode
       - vscode-extensions:/home/developer/.vscode-server
       - developer-home:/home/developer
-    networks:
-      - rails-network
     restart: unless-stopped
     stdin_open: true
     tty: true
-
-
-
-networks:
-  rails-network:
-    driver: bridge
 
 volumes:
   vscode-data:
