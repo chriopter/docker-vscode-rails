@@ -1,0 +1,35 @@
+services:
+  vscode-rails:
+    build: .
+    container_name: vscode-rails-dev
+    hostname: vscode-rails
+    environment:
+      - DISPLAY=:1
+      - VNC_PASSWORD=${VNC_PASSWORD:-developer}
+      - SSH_PASSWORD=${SSH_PASSWORD:-developer}
+    ports:
+      - "2222:22"      # SSH
+      - "3000:3000"    # Rails app
+      - "5901:5901"    # VNC
+      - "6080:6080"    # noVNC web
+    volumes:
+      - ./workspace:/home/developer/workspace
+      - vscode-data:/home/developer/.vscode
+      - vscode-extensions:/home/developer/.vscode-server
+      - developer-home:/home/developer
+    networks:
+      - rails-network
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+
+
+networks:
+  rails-network:
+    driver: bridge
+
+volumes:
+  vscode-data:
+  vscode-extensions:
+  developer-home:
