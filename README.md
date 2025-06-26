@@ -8,11 +8,11 @@ Provides a consistent, isolated Rails development environment accessible via SSH
 
 ## Features
 
-- Ubuntu 24.04 with Ruby 3.4.4 and Rails
-- VS Code with Ruby extensions pre-installed
+- Ubuntu Desktop with full GUI environment
+- Ruby and Rails pre-installed
+- VS Code with Ruby extensions
 - SSH access for VS Code Remote Development
-- VNC access with dynamic resolution support
-- noVNC web-based access
+- Web-based desktop via KasmVNC
 - Persistent workspace and settings
 - GitHub CLI included
 
@@ -25,8 +25,7 @@ docker-compose up -d
 ## Access
 
 - **SSH**: `ssh developer@localhost -p 2222` (password: developer)
-- **VNC**: `vnc://localhost:5901`
-- **Web VNC**: http://localhost:6080
+- **Web Desktop**: https://localhost:6901 (password: developer)
 - **Rails**: http://localhost:3000
 
 ## Example

@@ -16,8 +16,9 @@ fi
 
 # Update VNC password if provided
 if [ ! -z "$VNC_PASSWORD" ]; then
-    su - developer -c "echo '$VNC_PASSWORD' | vncpasswd -f > /home/developer/.vnc/passwd"
-    su - developer -c "chmod 600 /home/developer/.vnc/passwd"
+    echo "$VNC_PASSWORD" | vncpasswd -f > /home/developer/.vnc/passwd
+    chown developer:developer /home/developer/.vnc/passwd
+    chmod 600 /home/developer/.vnc/passwd
     log "VNC password updated"
 fi
 
@@ -28,13 +29,9 @@ chown -R developer:developer /home/developer/workspace || true
 log "Starting SSH service..."
 service ssh start
 
-# Start VNC server as developer user with dynamic resolution support
-log "Starting VNC server..."
-su - developer -c "vncserver :1 -depth 24 -localhost no -xstartup /usr/bin/startxfce4" || true
-
-# Start noVNC web server
-log "Starting noVNC..."
-su - developer -c "websockify --web=/usr/share/novnc/ --cert=/home/developer/.vnc/self.pem 6080 localhost:5901 >/dev/null 2>&1 &" || true
+# Start KasmVNC (already configured in base image)
+log "Starting KasmVNC..."
+su - developer -c '/opt/kasm/bin/kasm_default_profile.sh' &
 
 # Configure Git globally for the developer user
 su - developer -c "git config --global --add safe.directory /home/developer/workspace" || true
@@ -48,9 +45,12 @@ echo "================================================="
 echo ""
 echo "Access methods:"
 echo "  - SSH: ssh developer@localhost -p 2222"
-echo "  - VNC: vnc://localhost:5901"
-echo "  - Web VNC: http://localhost:6080"
+echo "  - Web Desktop: https://localhost:6901"
 echo "  - Rails: http://localhost:3000"
+echo ""
+echo "Default credentials:"
+echo "  - Username: developer"
+echo "  - Password: developer"
 echo ""
 echo "Installed tools:"
 echo "  - Ruby: $(ruby -v | cut -d' ' -f2)"
@@ -66,7 +66,7 @@ chmod +x /home/developer/welcome.sh
 chown developer:developer /home/developer/welcome.sh
 
 # Add welcome script to bashrc
-echo "/home/developer/welcome.sh" >> /home/developer/.bashrc
+grep -q "welcome.sh" /home/developer/.bashrc || echo "/home/developer/welcome.sh" >> /home/developer/.bashrc
 
 # Keep container running
 log "All services started. Container is ready!"

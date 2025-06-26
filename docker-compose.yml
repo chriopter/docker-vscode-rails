@@ -11,8 +11,7 @@ services:
     ports:
       - "2222:22"      # SSH
       - "3000:3000"    # Rails app
-      - "5901:5901"    # VNC
-      - "6080:6080"    # noVNC web
+      - "6901:6901"    # KasmVNC web
     volumes:
       - ./workspace:/home/developer/workspace
       - vscode-data:/home/developer/.vscode
